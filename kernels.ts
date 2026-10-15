@@ -40385,7 +40385,7 @@ export const WEIGHTS_COALESCE_MAX_GAP = 1 << 20;
 /** bytes in flight across concurrent reads (upstream `e3` 5333 had 96 MiB; Talk keeps it small so a download does not choke the connection) */
 export const WEIGHTS_READ_BYTE_BUDGET = 32 << 20;
 /** concurrent reads (upstream `t3` 5333 had 32; Talk uses 4 connections so video calls and other tabs keep their bandwidth) */
-export const WEIGHTS_READ_CONCURRENCY = 4;
+export const WEIGHTS_READ_CONCURRENCY = 8;
 /** upstream `Lu` 35921: tensors above this are streamed in chunks of this size */
 export const WEIGHTS_BIG_TENSOR_BYTES = 64 * 1024 * 1024;
 /** upstream `Ku` 3755: elements per output block of every packed route */
