@@ -2,7 +2,7 @@
 
 **Chat and talk with Ternary Bonsai 2, running privately in your browser on your own GPU.**
 
-### ▶ Try it: https://prismml-eng.github.io/Talk/talk.html
+### ▶ Try it: https://pre.bonsai.stream/
 
 Talk is one web page. It downloads a Bonsai 2 model once, then runs it on your GPU through WebGPU. Your chats, your voice and your documents never leave your machine.
 
