@@ -13,7 +13,7 @@ Talk is one web page. It downloads a Bonsai 2 model once, then runs it on your G
 - **Speech to text** of your choice (Settings): Whistle (built in, the default), or Whisper tiny.en, base.en or small.en (downloaded from Hugging Face on first use).
 - **Show it pictures**: attach, paste or drop an image and ask about it.
 - **Chat with your documents**: add PDF, Markdown, JSON, JSON Lines or text files. They're read and indexed in the tab, and answers cite the passages they used.
-- **Look things up** on Wikipedia and DuckDuckGo, and check the **weather** (Open-Meteo). All of it is fetched straight from your browser, and it can be turned off in Settings.
+- **Look things up**: web and news search, reading pages, **stocks, markets and the economy** (Trading Economics, Yahoo Finance), Wikipedia, and the **weather** (Open-Meteo). Wikipedia and the weather are fetched straight from your browser; web, news, page and market lookups go through a small Prism ML lookup server (those sites can't be reached from a browser directly), which gets only the search words or the address, never your chat. Search can be turned off in Settings.
 - **Works offline** once a model is downloaded: with no network, it just answers from what it knows.
 - Chats are saved in the browser, with Regenerate, Edit, Stop and Markdown export.
 
@@ -35,7 +35,7 @@ The weights come from Hugging Face (`prism-ml`). If Hugging Face can't be reache
 - No cookies, no analytics, no telemetry, and no chat logs.
 - Chats, settings and documents live in your browser's storage.
 - Speech recognition and speech synthesis run in the tab.
-- The only network requests go to the page host, the model download, and (when you use them) Wikipedia, DuckDuckGo and Open-Meteo.
+- The only network requests go to the page host, the model download, and (when the model looks something up) the Prism ML lookup server, Wikipedia, DuckDuckGo and Open-Meteo.
 
 Details are in [PRIVACY.md](PRIVACY.md). Answers come from a small AI model running on your machine, so they can be wrong. Check anything important yourself.
 
