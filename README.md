@@ -2,7 +2,7 @@
 
 **Chat and talk with Ternary Bonsai 2, running privately in your browser on your own GPU.**
 
-### ▶ Try it: https://pre.bonsai.stream/
+### ▶ Try it: https://prismml-eng.github.io/Talk/
 
 Talk is one web page. It downloads a Bonsai 2 model once, then runs it on your GPU through WebGPU. Your chats, your voice and your documents never leave your machine.
 
@@ -43,11 +43,12 @@ Details are in [PRIVACY.md](PRIVACY.md). Answers come from a small AI model runn
 
 | Path | What it is |
 |---|---|
-| `talk.html` | the whole app in one file: page, chat logic and the GPU engine, compressed and packed |
-| `kernels.ts` | the readable source of the WebGPU engine that runs Bonsai 2 (GGUF reader, tokenizer, WGSL kernels, vision). `talk.html` is built from this exact file |
+| `index.html` | the whole app in one file: page, chat logic and the GPU engine, compressed and packed |
+| `kernels.ts` | the readable source of the WebGPU engine that runs Bonsai 2 (GGUF reader, tokenizer, WGSL kernels, vision). `index.html` is built from this exact file |
 | `assets/voice/` | the voice models and their runtimes: Silero VAD, Smart Turn v3.2, Whistle, Paradee-8M, ONNX Runtime Web, Transformers.js |
 | `assets/pdf/` | PDF.js, for reading PDF documents |
 | `assets/fonts/`, `assets/katex/` | fonts |
+| `talk.html` | forwards old links to `index.html` |
 | `LICENSE`, `NOTICE`, `PRIVACY.md` | license, third-party credits and license texts, privacy |
 
 ## Hosting it yourself
@@ -57,7 +58,7 @@ Talk is static. Any web server that serves the files in this repo works:
 ```sh
 git clone https://github.com/PrismML-Eng/Talk && cd Talk
 python3 -m http.server 8000
-# then open http://localhost:8000/talk.html
+# then open http://localhost:8000/
 ```
 
 It has to be served over `http://localhost` or `https://`, not opened as a `file://` page, because WebGPU and the voice workers need a secure context. No special headers are needed.
