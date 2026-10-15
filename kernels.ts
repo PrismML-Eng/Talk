@@ -4121,7 +4121,7 @@ export async function createGpuContext(opts: GpuContextOptions = {}): Promise<Gp
         if (errors.length > 0) throw new Error(`createComputePipeline failed: ${errors.map((e) => e.message).join("\n")}`);
         return pipeline!;
       }
-    : (desc: GPUComputePipelineDescriptor) => device.createComputePipelineAsync(desc);
+    : (desc: GPUComputePipelineDescriptor) => gpuCompileLimited(() => device.createComputePipelineAsync(desc));
   // P9.6: a graph build compiles all of its pipelines at once, so one root cause (a construct the driver rejects, a lost
   // device) can fail many of them together. Within one burst of overlapping compiles only the first failure is reported
   // in full (message + source); the rest are counted and summed up in one more diagnostic when the burst is over.
@@ -4289,10 +4289,42 @@ export function gpuShaderModule(device: GPUDevice, code: string, label?: string)
   return h ? h.createShaderModule(code, label) : device.createShaderModule({ code, label });
 }
 
+/**
+ * Talk: compile pipelines a few at a time. Starting every compile of a graph build at once (P9.6) keeps the GPU
+ * process and every CPU core busy for seconds, which stalls video calls and the rest of the desktop. At most
+ * GPU_COMPILE_CONCURRENCY compiles run together, in the order they were asked for, with a short pause after each
+ * one so the browser and the GPU process get time to breathe. The pipelines and their order are unchanged.
+ */
+export const GPU_COMPILE_CONCURRENCY = 2;
+export const GPU_COMPILE_PAUSE_MS = 4;
+const gpuCompileQueue: (() => void)[] = [];
+let gpuCompileRunning = 0;
+export function gpuCompileLimited<T>(start: () => Promise<T>): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const run = (): void => {
+      gpuCompileRunning++;
+      let p: Promise<T>;
+      try {
+        p = start();
+      } catch (e) {
+        p = Promise.reject(e);
+      }
+      p.then(resolve, reject).finally(() => {
+        setTimeout(() => {
+          gpuCompileRunning--;
+          gpuCompileQueue.shift()?.();
+        }, GPU_COMPILE_PAUSE_MS);
+      });
+    };
+    if (gpuCompileRunning < GPU_COMPILE_CONCURRENCY) run();
+    else gpuCompileQueue.push(run);
+  });
+}
+
 /** host.createComputePipeline for the device's host, else createComputePipelineAsync on the device */
 export function gpuComputePipeline(device: GPUDevice, desc: GPUComputePipelineDescriptor): Promise<GPUComputePipeline> {
   const h = GPU_DEVICE_HOSTS.get(device)?.host;
-  return h ? h.createComputePipeline(desc) : device.createComputePipelineAsync(desc);
+  return h ? h.createComputePipeline(desc) : gpuCompileLimited(() => device.createComputePipelineAsync(desc));
 }
 
 /** pipelines compiled so far through the device's host (null: the device has none) */
@@ -39583,7 +39615,7 @@ function kernelHostOf(gpu: GpuContext): KernelHost {
     device,
     deviceInfo,
     createShaderModule: (code, label) => device.createShaderModule({ code, label }),
-    createComputePipeline: (desc) => device.createComputePipelineAsync(desc),
+    createComputePipeline: (desc) => gpuCompileLimited(() => device.createComputePipelineAsync(desc)),
     createBuffer: (desc) => device.createBuffer(desc),
     createUniformBuffer(data, label) {
       const size = Math.max(16, Math.ceil(data.byteLength / 16) * 16);
@@ -40350,10 +40382,10 @@ const WEIGHTS_TYPE_PRISM_PTQ1_0 = 143 as GgmlType;
 export const WEIGHTS_COALESCE_MAX_BYTES = 24 << 20;
 /** upstream `J1` 5333: tensors further apart than this are not coalesced */
 export const WEIGHTS_COALESCE_MAX_GAP = 1 << 20;
-/** upstream `e3` 5333: bytes in flight across concurrent reads */
-export const WEIGHTS_READ_BYTE_BUDGET = 96 << 20;
-/** upstream `t3` 5333: concurrent reads */
-export const WEIGHTS_READ_CONCURRENCY = 32;
+/** bytes in flight across concurrent reads (upstream `e3` 5333 had 96 MiB; Talk keeps it small so a download does not choke the connection) */
+export const WEIGHTS_READ_BYTE_BUDGET = 32 << 20;
+/** concurrent reads (upstream `t3` 5333 had 32; Talk uses 4 connections so video calls and other tabs keep their bandwidth) */
+export const WEIGHTS_READ_CONCURRENCY = 4;
 /** upstream `Lu` 35921: tensors above this are streamed in chunks of this size */
 export const WEIGHTS_BIG_TENSOR_BYTES = 64 * 1024 * 1024;
 /** upstream `Ku` 3755: elements per output block of every packed route */
