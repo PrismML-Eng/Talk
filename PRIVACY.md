@@ -27,7 +27,7 @@ Your browser connects to these services. Each one sees your IP address and the r
 | DuckDuckGo (api.duckduckgo.com) | when the model looks something up, if Search is on | the search words: [DuckDuckGo privacy policy](https://duckduckgo.com/privacy) |
 | Open-Meteo (open-meteo.com) | when you ask about the weather | the place name and its coordinates: [Open-Meteo terms](https://open-meteo.com/en/terms) |
 
-Search, markets and weather are off until you turn them on in Settings (one switch). With them off, and the model already downloaded, Talk works with no network at all.
+Search, markets and weather are on by default and can be turned off in Settings (one switch). With them off, and the model already downloaded, Talk works with no network at all.
 
 ## AI output
 
