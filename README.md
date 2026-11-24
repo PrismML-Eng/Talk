@@ -8,7 +8,7 @@ Talk is one web page. It downloads a Bonsai 2 model once, then runs it on your G
 
 ## What it does
 
-- **Chat** with Bonsai 2B, 4B or 9B. Answers stream in with formatting, math and code highlighting.
+- **Chat** with Bonsai 2B, 4B, 9B or the new Bonsai 2.5 27B. Answers stream in with formatting, math and code highlighting.
 - **Talk** hands-free: it listens, knows when you've finished speaking, answers out loud, and stops when you talk over it. The mic and the voice each have their own mute button.
 - **Speech to text** of your choice (Settings): Whistle (built in, the default), or Whisper tiny.en, base.en or small.en (downloaded from Hugging Face on first use).
 - **Show it pictures**: attach, paste or drop an image and ask about it.
@@ -27,6 +27,7 @@ Talk is one web page. It downloads a Bonsai 2 model once, then runs it on your G
 | [Bonsai 2B](https://huggingface.co/prism-ml/Ternary-Bonsai-2-2B-gguf) | 0.43 GB + 0.36 GB | phones, laptops with integrated graphics |
 | [Bonsai 4B](https://huggingface.co/prism-ml/Ternary-Bonsai-2-4B-gguf) | 0.95 GB + 0.37 GB | most laptops and desktops |
 | [Bonsai 9B](https://huggingface.co/prism-ml/Ternary-Bonsai-2-9B-gguf) | 2.0 GB + 0.62 GB | desktops and laptops with a discrete GPU |
+| Bonsai 2.5 27B (the default on computers; it loads when you press Load model) | 6.0 GB + 0.63 GB | desktops and laptops with a large GPU (about 12 GB of free GPU memory) |
 
 The weights come from Hugging Face (`prism-ml`). If Hugging Face can't be reached, Talk uses the Prism ML mirror instead. You can also download a GGUF yourself and open it with **Open model file**.
 
