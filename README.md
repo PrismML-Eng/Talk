@@ -28,6 +28,7 @@ Talk is one web page. It downloads a Bonsai 2 model once, then runs it on your G
 | [Bonsai 4B](https://huggingface.co/prism-ml/Ternary-Bonsai-2-4B-gguf) | 0.95 GB + 0.37 GB | most laptops and desktops |
 | [Bonsai 9B](https://huggingface.co/prism-ml/Ternary-Bonsai-2-9B-gguf) | 2.0 GB + 0.62 GB | desktops and laptops with a discrete GPU |
 | [Bonsai 2.5 27B](https://huggingface.co/prism-ml/Ternary-Bonsai-2.5-27B-GGUF) (the default on computers; it loads when you press Load model) | 6.2 GB + 0.63 GB | desktops and laptops with a large GPU (about 10.6 GB of free GPU memory) |
+| [Bonsai 2.5 27B, PQ2 file](https://huggingface.co/prism-ml/Ternary-Bonsai-2.5-27B-GGUF) (the same model as a 2-bit file; pick it in the model list) | 7.5 GB + 0.63 GB | the same computers as the 27B |
 
 The weights come from Hugging Face (`prism-ml`). If Hugging Face can't be reached, Talk uses the Prism ML mirror instead. You can also download a GGUF yourself and open it with **Open model file**.
 
